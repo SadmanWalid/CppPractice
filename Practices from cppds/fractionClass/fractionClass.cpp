@@ -7,6 +7,7 @@ using namespace std;
 
 
 
+
 int gcf(int top, int bottom) //find greatest common factor between two intiger numbers. Euclid’s Algorithm states that the greatest common divisor of two integers m and n is n if n divides m evenly. However, if n does not divide m evenly, then the answer is the greatest common divisor of n and the remainder of m divided by n. 
 
 {
