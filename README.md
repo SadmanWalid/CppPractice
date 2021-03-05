@@ -1,2 +1,2 @@
 # CppPractice
-Practice problems solutions in C++
+Practice problems's solutions using C++
