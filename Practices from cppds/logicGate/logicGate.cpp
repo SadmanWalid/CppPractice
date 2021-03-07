@@ -9,21 +9,22 @@ class LogicGate // Base Class
      {
          label=name;
      }
+     
      string getLabel()
      {
          return label;
      }
-     bool getOutput()
+     bool getOutput() //return output
      {
          output=performGateLogic();
          return output;
      }
-     virtual bool performGateLogic()
+     virtual bool performGateLogic() 
      {
-         cout<<"Error!!!Form base class";
+         cout<<"Error!!!Form base class"<<endl;
          return 0;   
      }
-     virtual void setNextPin(bool source)
+     virtual void setNextPin(bool source) 
     {
         cout<<"Error!!!setNextPin base"<<endl;
     }
@@ -62,7 +63,7 @@ class BinaryGate: public LogicGate //derived class from LogicGate class
         }
         return pinB;
     }
-    virtual void setNextPin(bool source)
+     void setNextPin(bool source)
     {
         if(pinATaken==false)
         {
@@ -102,7 +103,7 @@ class UnaryGate: public LogicGate //derived class from LogicGate class
         }
         return pin;
     }
-    virtual void setNextPin(bool source)
+     void setNextPin(bool source)
     {
         if(pinTaken==false)
         {
@@ -134,9 +135,11 @@ class AndGate: public BinaryGate //derived class from BinaryGate class
 
 class OrGate: public BinaryGate //derived class from BinaryGate class
 {
+    public:
+
     OrGate(string name):BinaryGate(name)
     {}
-    virtual bool performGetLogic()
+    virtual bool performGateLogic()
     {
         bool a=getPinA();
         bool b=getPinB();
@@ -162,12 +165,77 @@ class NotGate :public UnaryGate //derived class from unaryGate class
       return 0;   
     }
 };
-
-
-int main()
+class NorGate : public BinaryGate //NorGate implementation
 {
-    NotGate gatetest (" gatetest ");
-    bool result=gatetest.getOutput();
+  public:
+  NorGate(string name):BinaryGate(name)
+  {}
+  bool performGateLogic()
+  {
+      bool a=getPinA();
+      bool b=getPinB();
+      if(a==0 && b==0)
+        return true;
+      else if(a==1 || b==1)
+       return false;
+    return 0;
+  }
+
+
+};
+
+class Connector
+{
+    private:
+     LogicGate *fromGate, *toGate;
+    public:
+     Connector(LogicGate *gateFromWhereInputCome, LogicGate *gateTowhereInputGO)
+     {
+         fromGate=gateFromWhereInputCome;
+         toGate=gateTowhereInputGO;
+         toGate->setNextPin(fromGate->getOutput());
+     }
+     LogicGate *getFrom()
+     {
+         return fromGate;
+     }
+     LogicGate *GetTo()
+     {
+         return toGate;
+     }
+
+};
+int main()
+{   //creating gate objects
+    AndGate and1("AND1"); 
+    AndGate and2("AND2");
+    OrGate or1("OR1");
+    //assigning valuw to and gates
+    bool and1A,and1B,and2A,and2B;
+    cout<<"Enter value for pinA of "<<and1.getLabel()<<": ";
+    cin>>and1A;
+    cout<<"Enter value for pinb of "<<and1.getLabel()<<": ";
+    cin>>and1B;
+    cout<<"Enter value for pinA of "<<and2.getLabel()<<": ";
+    cin>>and2A;
+    cout<<"Enter value for pinB of "<<and2.getLabel()<<": ";
+    cin>>and2B;
+    and1.setNextPin(and1A);
+    and1.setNextPin(and1B);
+    and2.setNextPin(and2A);
+    and2.setNextPin(and2B);
+
+    //making connection
+    Connector c1(&and1,&or1);
+    Connector c2(&and2,&or1);
+
+    bool result=or1.getOutput();
+
+    cout<<and1.getLabel()<<" : pinA:"<<and1.getPinA()<<" || pinB:"<<and1.getPinB()<<endl;
+    cout<<and2.getLabel()<<" : pinA:"<<and2.getPinA()<<" || pinB:"<<and2.getPinB()<<endl;
+
     cout<<"result: "<<result;
+
+
     return 0;
 }
